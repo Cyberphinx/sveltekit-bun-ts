@@ -1,38 +1,62 @@
-# create-svelte
+# Build an app with SvelteKit and Bun
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
 ## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+Use bun create to scaffold your app with the svelte package. Answer the prompts to select a template and set up your development environment.
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
 # create a new project in my-app
-npm create svelte@latest my-app
+bun create svelte@latest my-app
+
+# Once the project is initialized, cd into the new project and install dependencies.
+cd my-app
+bun install
 ```
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Then start the development server with `bun --bun run dev`.
+To run the dev server with Node.js instead of Bun, you can omit the `--bun` flag.
 
 ```bash
-npm run dev
+bun --bun run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
 
+Visit `http://localhost:5173` in a browser to see the template app.
+
 ## Building
 
-To create a production version of your app:
+To build for production, you'll need to add the right SvelteKit adapter. Currently we recommend the:
 
 ```bash
-npm run build
+bun add -D svelte-adapter-bun
+```
+Now, make the following changes to your `svelte.config.js`
+
+```diff
+- import adapter from "@sveltejs/adapter-auto";
++ import adapter from "svelte-adapter-bun";
+import { vitePreprocess } from "@sveltejs/kit/vite";
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  kit: {
+    adapter: adapter(),
+  },
+  preprocess: vitePreprocess(),
+};
+
+export default config;
 ```
 
-You can preview the production build with `npm run preview`.
+To build a production bundle with `bun run build`:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Run npm run preview to preview your production build locally.
+
+> Using svelte-adapter-bun
+  ✔ Start server with: bun ./build/index.js
+  ✔ done 
